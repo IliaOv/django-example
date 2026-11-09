@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Главная{% endblock %}
+{% block content %}
+<div class="card bg-white border-0 shadow-sm mb-4">
+  <div class="card-body">
+    <h1 class="h5 mb-3">Имя и возраст</h1>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button class="btn btn-solid theme-primary" type="submit">Сохранить</button>
+    </form>
+  </div>
+</div>
+
+<div class="card bg-white border-0 shadow-sm mb-4">
+  <div class="card-body">
+    <form method="get" class="d-flex gap-2 mb-3">
+      <select name="name" class="form-control">
+        <option value="" {% if not request.GET.name %}selected{% endif %}>Все</option>
+        {% for n in names %}
+        <option value="{{ n }}" {% if n == request.GET.name %}selected{% endif %}>{{ n }}</option>
+        {% endfor %}
+      </select>
+      <button class="btn btn-outline theme-secondary" type="submit">Показать</button>
+    </form>
+    <h2 class="h5 mb-3">Таблица</h2>
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead>
+          <tr><th>Имя</th><th>Возраст</th></tr>
+        </thead>
+        <tbody>
+          {% for person in people %}
+          <tr>
+            <td>{{ person.name }}</td>
+            <td>{{ person.age }}</td>
+          </tr>
+          {% empty %}
+          <tr><td class="opacity-75">Пока никого нет</td><td></td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="card bg-white border-0 shadow-sm">
+  <div class="card-body">
+    <h2 class="h5 mb-3">График</h2>
+    {% for person in people %}
+    <div class="d-flex align-items-center gap-3 mb-2">
+      <span>{{ person.name }}</span>
+      <div class="progress flex-grow-1 theme-primary" style="height: 6px">
+        <div class="progress-bar" style="width: {{ person.age }}%"></div>
+      </div>
+      <span>{{ person.age }}</span>
+    </div>
+    {% empty %}
+    <p class="opacity-75 mb-0">Нет данных</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}О проекте{% endblock %}
+{% block content %}
+<div class="card bg-white border-0 shadow-sm">
+  <div class="card-body">
+    <h1 class="h5 mb-3">О проекте</h1>
+    <p class="opacity-75">Краткое описание решения для жюри.</p>
+    {% for m in messages %}
+    <p class="mb-2">
+      {% if m.is_bot %}
+      <span class="badge badge-subtle theme-primary">Компьютер</span>
+      {% else %}
+      <span class="badge badge-subtle theme-secondary">Вы</span>
+      {% endif %}
+      {{ m.text }}
+    </p>
+    {% empty %}
+    <p class="opacity-75">Сообщений нет</p>
+    {% endfor %}
+    <form method="post" class="d-flex gap-2 mt-3">
+      {% csrf_token %}
+      <input name="text" required class="form-control">
+      <button class="btn btn-solid theme-primary" type="submit">Отправить</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
